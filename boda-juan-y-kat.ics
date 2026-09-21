@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Juan y Kat//Boda 2026//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:boda-juan-kat-2026-11-21@yerbabuena
+DTSTAMP:20260920T000000Z
+DTSTART;TZID=America/Bogota:20261121T140000
+DTEND;TZID=America/Bogota:20261121T210000
+SUMMARY:Boda de Juan y Kat
+LOCATION:Rincón de Yerbabuena Casa 44\, Chía\, Cundinamarca
+GEO:4.862934;-74.002701
+DESCRIPTION:De 2:00 p.m. a 9:00 p.m.\n\nDress code: verano italiano\, tonos claros.\nLleva algo de abrigo: de noche Chía baja a unos 10 °C.\n\nEn la portería: Casa 44\, boda de Juan y Kat.
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Mañana es la boda de Juan y Kat
+END:VALARM
+END:VEVENT
+END:VCALENDAR
