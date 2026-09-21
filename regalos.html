@@ -184,6 +184,12 @@
   <p>Sábado 21 de noviembre de 2026 · Chía, Cundinamarca</p>
   <p style="opacity:.92;margin-top:14px">¿Alguna duda, o te perdiste en el camino?
      <a href="https://wa.me/573112276705" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a></p>
+  <p class="credito">
+    Esta página la hicimos nosotros. ¿Quieres una así?<br>
+    <a href="https://wa.me/573142619842" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    <span class="sep">·</span>
+    <a href="mailto:jose.martinez@thephonemarket.com.co?subject=Quiero%20una%20p%C3%A1gina%20as%C3%AD">Correo</a>
+  </p>
 </footer>
 
 <script>
@@ -431,8 +437,18 @@
 
   function salta(){
     if(!empezado){ empezado=true; reinicia(); bucle(); return; }
-    if(!vivo){ reinicia(); return; }
+    if(!vivo){
+      /* si está pendiente anotar el puntaje, tocar NO reinicia:
+         lleva al campo de iniciales, que si no se pierde la carrera */
+      if(!form.hidden){ traeFormulario(); return; }
+      reinicia(); return;
+    }
     if(jul.y===0){ jul.v=-11.4; }
+  }
+
+  function traeFormulario(){
+    try{ form.scrollIntoView({behavior:'smooth', block:'center'}); }catch(e){}
+    setTimeout(function(){ try{ campo.focus(); }catch(e){} }, 340);
   }
 
   function pinta(dt){
@@ -467,8 +483,8 @@
           pendiente=puntos; recien=-1;
           if(entra(Math.floor(puntos))){
             form.hidden=false;
-            pie.textContent='¡Ay, Julio! Pero qué carrera.';
-            setTimeout(function(){ try{ campo.focus(); }catch(e){} }, 60);
+            pie.textContent='¡Ay, Julio! Pero qué carrera. Anótate abajo.';
+            traeFormulario();
           } else {
             pie.textContent='¡Ay, Julio! Toca otra vez para volver a empezar.';
           }
@@ -494,7 +510,8 @@
       c.font='500 26px "Cormorant Garamond", Georgia, serif';
       c.fillText('Julio se tropezó', AN/2, AL/2-6);
       c.font='400 16px Inter, Helvetica, Arial, sans-serif'; c.fillStyle='#52524A';
-      c.fillText('Toca para intentarlo otra vez', AN/2, AL/2+22);
+      c.fillText(form.hidden ? 'Toca para intentarlo otra vez'
+                             : 'Escribe tus iniciales aquí abajo ↓', AN/2, AL/2+22);
       c.textAlign='left';
     }
   }
@@ -548,6 +565,7 @@
   }, {passive:false});
   window.addEventListener('keydown', function(e){
     if(caja.hidden) return;
+    if(document.activeElement===campo) return;   /* escribiendo iniciales */
     if(e.key===' '||e.key==='ArrowUp'){ e.preventDefault(); salta(); }
     if(e.key==='Escape') cierra();
   });

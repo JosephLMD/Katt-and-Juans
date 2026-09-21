@@ -491,3 +491,20 @@ footer a{color:#fff;}
   cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .iniciales button:hover{background:var(--oliva-p);}
 .iniciales[hidden]{display:none;}
+
+/* ── el crédito, al fondo del pie ────────────────────────────────────
+   Discreto a propósito: separado por una línea fina, pequeño y sin
+   negritas, para que no compita con los novios. Pero legible y
+   tocable de verdad, no un susurro gris de 11px. */
+.credito{
+  margin:26px auto 0;padding-top:20px;max-width:34ch;
+  border-top:1px solid rgba(255,255,255,.18);
+  font-size:15px;line-height:1.7;color:#DDE7D0;
+}
+.credito a{
+  color:#fff;text-decoration:underline;text-underline-offset:3px;
+  text-decoration-thickness:1px;
+  display:inline-block;padding:6px 2px;   /* área de toque cómoda */
+}
+.credito a:hover{text-decoration-thickness:2px;}
+.credito .sep{opacity:.45;padding:0 4px;}
