@@ -428,37 +428,6 @@ footer a{color:#fff;}
   font-weight:600;color:var(--oliva);background:none;border:0;cursor:pointer;
   padding:14px 18px;min-height:52px;-webkit-tap-highlight-color:transparent;}
 
-/* ── el salón de la fama ─────────────────────────────────────────────
-   Estética de arcade pero con la paleta de la boda: números tabulares
-   para que las cifras queden en columna y no bailen. */
-.fama{margin:16px 0 0;background:var(--crema);border:1px solid rgba(194,171,138,.6);
-  border-radius:14px;padding:18px 20px;box-shadow:var(--sombra);}
-.fama h4{margin:0 0 12px;font-family:var(--sans);font-size:16px;font-weight:700;
-  color:var(--oliva);letter-spacing:.06em;text-align:center;}
-.fama ol{list-style:none;margin:0;padding:0;}
-.fama li{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;
-  padding:9px 0;border-top:1px solid var(--crema-2);font-variant-numeric:tabular-nums;}
-.fama li:first-child{border-top:0;}
-.fama .pos{font-weight:700;color:var(--arena-p);font-size:17px;}
-.fama .ini{font-weight:700;letter-spacing:.14em;font-size:19px;color:var(--tinta);}
-.fama .pts{font-weight:600;font-size:19px;color:var(--oliva);}
-.fama li.nuevo .ini,.fama li.nuevo .pts{color:var(--terracota);}
-.fama .vacio{color:var(--tinta-s);font-size:16px;text-align:center;padding:8px 0;}
-
-.nuevo-record{margin:16px 0 0;background:#FCF4EE;border:2px solid var(--terracota);
-  border-radius:14px;padding:20px;text-align:center;}
-.nuevo-record[hidden]{display:none;}
-.nuevo-record p{margin:0 0 14px;font-size:18px;font-weight:600;color:var(--terracota);}
-.nuevo-record form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.nuevo-record input{font:inherit;font-size:26px;font-weight:700;letter-spacing:.3em;
-  text-align:center;text-transform:uppercase;width:130px;min-height:56px;padding:8px 6px 8px 14px;
-  border:2px solid var(--arena-p);border-radius:12px;background:#fff;color:var(--tinta);}
-.nuevo-record input:focus{outline:3px solid var(--oliva);outline-offset:2px;border-color:var(--oliva);}
-.nuevo-record button{font:inherit;font-size:16px;font-weight:600;min-height:56px;
-  padding:14px 26px;border:0;border-radius:999px;background:var(--oliva);color:#fff;
-  cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.nuevo-record button:hover{background:var(--oliva-p);}
-
 /* ── el marcador, estilo arcade ──────────────────────────────────── */
 .marcador{margin:16px auto 0;max-width:560px;background:var(--crema);
   border:1px solid rgba(194,171,138,.6);border-radius:14px;
