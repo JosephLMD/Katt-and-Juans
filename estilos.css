@@ -395,3 +395,12 @@ footer a{color:#fff;}
   box-shadow:var(--sombra);border:1px solid rgba(194,171,138,.55);}
 .reel-caja iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
 .reel-pie{font-size:16px;color:var(--tinta-s);margin:14px 0 0;text-align:center;}
+
+/* ── Julio ───────────────────────────────────────────────────────── */
+.julio{display:flex;align-items:center;gap:16px;margin:26px auto 0;max-width:430px;
+  background:var(--crema);border:1px solid rgba(194,171,138,.6);
+  border-radius:999px;padding:11px 24px 11px 11px;box-shadow:var(--sombra);}
+.julio img{width:74px;height:74px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+  border:2px solid var(--crema-2);}
+.julio p{margin:0;font-family:var(--serif);font-style:italic;font-size:19px;
+  line-height:1.45;color:var(--oliva);text-align:left;}
