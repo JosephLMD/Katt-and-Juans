@@ -404,3 +404,26 @@ footer a{color:#fff;}
   border:2px solid var(--crema-2);}
 .julio p{margin:0;font-family:var(--serif);font-style:italic;font-size:19px;
   line-height:1.45;color:var(--oliva);text-align:left;}
+
+/* ── el juego de Julio ───────────────────────────────────────────────
+   Se despliega al tocar su foto. No arranca solo, no suena, y no se
+   lleva el scroll de la página: solo bloquea el gesto cuando el dedo
+   cae dentro del lienzo y la partida está viva. */
+.julio{cursor:pointer;transition:transform .18s,box-shadow .18s;
+  -webkit-tap-highlight-color:transparent;}
+.julio:hover,.julio:focus-visible{transform:translateY(-2px);
+  box-shadow:0 8px 26px rgba(94,106,72,.20);}
+.julio:focus-visible{outline:3px solid var(--oliva);outline-offset:3px;}
+.julio .pista{display:block;font-family:var(--sans);font-style:normal;
+  font-size:15px;color:var(--tinta-s);margin-top:3px;}
+
+.juego{margin:18px auto 0;max-width:560px;}
+.juego[hidden]{display:none;}
+.juego-caja{position:relative;border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,#FBF8F1 0%,#F2EEE2 100%);
+  border:1px solid rgba(194,171,138,.6);box-shadow:var(--sombra);}
+.juego canvas{display:block;width:100%;height:auto;touch-action:manipulation;}
+.juego-pie{font-size:16px;color:var(--tinta-s);margin:12px 0 0;text-align:center;}
+.juego-cerrar{display:block;margin:10px auto 0;font:inherit;font-size:16px;
+  font-weight:600;color:var(--oliva);background:none;border:0;cursor:pointer;
+  padding:14px 18px;min-height:52px;-webkit-tap-highlight-color:transparent;}
