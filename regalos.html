@@ -145,7 +145,36 @@
         <canvas id="lienzo" width="1120" height="360"
                 aria-label="Juego: ayuda a Julio a saltar las materas"></canvas>
       </div>
+      <div class="nuevo-record" id="nuevo-record" hidden>
+        <p id="nuevo-texto">¡Entraste al salón de la fama!</p>
+        <form id="form-fama">
+          <input id="iniciales" type="text" maxlength="3" autocomplete="off"
+                 autocapitalize="characters" spellcheck="false"
+                 aria-label="Tus tres iniciales" placeholder="AAA">
+          <button type="submit">Guardar</button>
+        </form>
+      </div>
+
+      <div class="fama" id="fama">
+        <h4>SALÓN DE LA FAMA</h4>
+        <ol id="fama-lista"></ol>
+      </div>
+
       <p class="juego-pie" id="juego-pie">Toca la pantalla para que Julio salte.</p>
+
+      <form class="iniciales" id="iniciales" hidden>
+        <label for="ini">¡Entraste al top 5! Pon tus iniciales:</label>
+        <input id="ini" type="text" maxlength="3" inputmode="latin" autocomplete="off"
+               spellcheck="false" pattern="[A-Za-zÑñ]{1,3}" placeholder="AAA" required>
+        <button type="submit">Guardar</button>
+      </form>
+
+      <div class="marcador" id="marcador">
+        <h4>Top 5 · Julio corredor</h4>
+        <ol id="tabla"></ol>
+        <p class="vacio" id="vacio">Todavía nadie ha corrido. Estrénalo tú.</p>
+      </div>
+
       <button class="juego-cerrar" type="button" id="juego-cerrar">Cerrar el juego</button>
     </div>
   </div>
@@ -297,9 +326,103 @@
   }
 
   var jul, obs, vel, puntos, mejor=0, vivo=false, empezado=false, t0=0, marco=0, raf=null;
+
+  /* ── el marcador ────────────────────────────────────────────────
+     Vive en este teléfono, no en un servidor: GitHub Pages sirve
+     archivos y no guarda nada. Para un tablero compartido de verdad
+     haría falta un backend. */
+  /* ↓↓↓ Pega aquí la URL del Worker de Cloudflare cuando lo montes.
+     Si la dejas vacía, el marcador funciona igual pero solo en este
+     teléfono. Instrucciones en marcador/LEEME.md */
+  var MARCADOR_URL = 'https://marcador-julio.jose-martinez-e4c.workers.dev';
+
+  var CLAVE='julio-top5', TOPE=5, tabla=document.getElementById('tabla'),
+      vacio=document.getElementById('vacio'), form=document.getElementById('iniciales'),
+      campo=document.getElementById('ini'), recien=-1;
+
+  function leeTop(){
+    try{
+      var t=JSON.parse(localStorage.getItem(CLAVE)||'[]');
+      return Array.isArray(t)?t.filter(function(r){
+        return r && typeof r.p==='number' && typeof r.n==='string';
+      }).slice(0,TOPE):[];
+    }catch(e){ return []; }
+  }
+  function guardaTop(t){ try{ localStorage.setItem(CLAVE, JSON.stringify(t)); }catch(e){} }
+
+  var remoto=null;   /* lo que dijo el servidor la última vez */
+
+  function bajaTop(){
+    if(!MARCADOR_URL) return;
+    fetch(MARCADOR_URL.replace(/\/$/,'') + '/top', {cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(t){
+        if(Array.isArray(t)){ remoto=t.slice(0,10); pintaTop(); }
+      })
+      .catch(function(){ /* sin red: se queda el marcador local */ });
+  }
+
+  function pintaTop(){
+    var t = remoto || leeTop();
+    tabla.innerHTML='';
+    vacio.hidden = t.length>0;
+    t.forEach(function(r,i){
+      var li=document.createElement('li');
+      if(i===recien) li.className='nuevo';
+      li.innerHTML='<span class="pos">'+(i+1)+'</span>'+
+        '<span class="ini"></span><span class="pts"></span>';
+      li.querySelector('.ini').textContent=r.n;
+      li.querySelector('.pts').textContent=('00000'+r.p).slice(-5);
+      tabla.appendChild(li);
+    });
+  }
+  function entra(p){
+    var t = remoto || leeTop(), tope = remoto ? 10 : TOPE;
+    return p>0 && (t.length<tope || p>t[t.length-1].p);
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var n=(campo.value||'').toUpperCase().replace(/[^A-ZÑ]/g,'').slice(0,3);
+    if(!n) return;
+    var p=Math.floor(pendiente);
+    function local(){
+      var t=leeTop();
+      t.push({n:n, p:p});
+      t.sort(function(a,b){ return b.p-a.p; });
+      t=t.slice(0,TOPE);
+      guardaTop(t);
+      if(!remoto){ recien=t.findIndex(function(r){ return r.n===n && r.p===p; }); }
+      pintaTop();
+    }
+    form.hidden=true; campo.value='';
+    pie.textContent='Quedó anotado. Toca la pantalla para otra ronda.';
+
+    if(MARCADOR_URL){
+      fetch(MARCADOR_URL.replace(/\/$/,'') + '/score', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({n:n, p:p})
+      })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(t){
+        if(Array.isArray(t)){
+          remoto=t.slice(0,10);
+          recien=remoto.findIndex(function(r){ return r.n===n && r.p===p; });
+          pintaTop();
+        } else { local(); }
+      })
+      .catch(function(){ local(); });   /* sin red, no se pierde el puntaje */
+    } else { local(); }
+  });
+  var pendiente=0;
+
   try{ mejor=parseInt(localStorage.getItem('julio-mejor')||'0',10)||0; }catch(e){}
+  var titulo=document.querySelector('.marcador h4');
+  if(titulo && MARCADOR_URL) titulo.textContent='Top 10 · Julio corredor';
+  pintaTop();
+  bajaTop();
 
   function reinicia(){
+    form.hidden=true;
     jul={y:0, v:0};  obs=[];  vel=3.4;  puntos=0;  vivo=true;  marco=0;
     t0=performance.now();
     siguiente=AN+80;
@@ -341,7 +464,14 @@
           vivo=false;
           mejor=Math.max(mejor, Math.floor(puntos));
           try{ localStorage.setItem('julio-mejor', String(mejor)); }catch(e){}
-          pie.textContent='¡Ay, Julio! Toca otra vez para volver a empezar.';
+          pendiente=puntos; recien=-1;
+          if(entra(Math.floor(puntos))){
+            form.hidden=false;
+            pie.textContent='¡Ay, Julio! Pero qué carrera.';
+            setTimeout(function(){ try{ campo.focus(); }catch(e){} }, 60);
+          } else {
+            pie.textContent='¡Ay, Julio! Toca otra vez para volver a empezar.';
+          }
         }
       }
       marco += vel*0.06;
@@ -396,6 +526,7 @@
       c.fillText('Toca para que Julio corra', AN/2, 56);
       c.textAlign='left';
     }
+    bajaTop();
     caja.scrollIntoView({behavior:'smooth', block:'center'});
   }
   function cierra(){
