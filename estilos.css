@@ -383,3 +383,15 @@ footer a{color:#fff;}
 @supports not (backdrop-filter:blur(2px)){
   .btn-regalo{background:rgba(255,255,255,.88);}
 }
+
+/* ── el reel de la pedida ────────────────────────────────────────────
+   Instagram muestra el primer fotograma y un botón que dice "Watch on
+   Instagram": la foto se ve sin tocar nada, pero darle play abre la app.
+   Por eso debajo va un enlace explícito, para que nadie se quede
+   picándole a un botón que no hace lo que espera. */
+.reel{max-width:400px;margin:0 auto;}
+.reel-caja{position:relative;width:100%;padding-bottom:calc(177.78% + 128px);
+  border-radius:14px;overflow:hidden;background:var(--crema-2);
+  box-shadow:var(--sombra);border:1px solid rgba(194,171,138,.55);}
+.reel-caja iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.reel-pie{font-size:16px;color:var(--tinta-s);margin:14px 0 0;text-align:center;}
